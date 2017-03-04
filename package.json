@@ -1,6 +1,6 @@
 {
   "name": "dom-filenameify",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Add filenames as attributes to your DOM elements to help locate them in code via inspect element",
   "main": "src/dom-filenameify.js",
   "directories": {

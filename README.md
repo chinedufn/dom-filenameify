@@ -38,10 +38,6 @@ See [hyperscript api](https://github.com/Raynos/virtual-hyperscript#hselector-pr
 The hyperscript AST parsing got messy fast. Dive into that code with caution... Open an issue if you're stuck!
 Hopefully we can clean it up and delete this note someday..
 
----
-
-There are currently no options. If you need something feel free to open a PR or issue!
-
 ```js
 // hyperscript API examples
 h('span', {style: {color: 'blue'}, id: 1}, 'foo bar')
@@ -52,6 +48,10 @@ react.createElement('div', [
   'another text node'
 ])
 ```
+
+---
+
+There are currently no options. If you need something feel free to open a PR or issue!
 
 ## To Install
 

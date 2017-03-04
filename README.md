@@ -27,32 +27,6 @@ for full examples.
 
 For example:
 
-## Notes
-
-The `hyperscript API` is `domBuilder(htmlSelector, properties, children)`
-
-See [hyperscript api](https://github.com/Raynos/virtual-hyperscript#hselector-properties-children)
-
-```js
-// hyperscript API examples
-h('span', {style: {color: 'blue'}, id: 1}, 'foo bar')
-react.createElement('div', [
-  'a text node',
-  react.createElement('span', {
-  }, 'a span node'),
-  'another text node'
-])
-```
-
----
-
-The hyperscript AST parsing got messy fast. Dive into that code with caution... Open an issue if you're stuck!
-Hopefully we can clean it up and delete this note someday..
-
----
-
-There are currently no options. If you need something feel free to open a PR or issue!
-
 ## To Install
 
 To install the CLI use
@@ -137,6 +111,32 @@ if you open up an issue describing the error. At any rate, let's get this fixed!
 ```sh
 $ npm run test
 ```
+
+## Notes
+
+The `hyperscript API` is `domBuilder(htmlSelector, properties, children)`
+
+See [hyperscript api](https://github.com/Raynos/virtual-hyperscript#hselector-properties-children)
+
+```js
+// hyperscript API examples
+h('span', {style: {color: 'blue'}, id: 1}, 'foo bar')
+react.createElement('div', [
+  'a text node',
+  react.createElement('span', {
+  }, 'a span node'),
+  'another text node'
+])
+```
+
+---
+
+The hyperscript AST parsing got messy fast. Dive into that code with caution... Open an issue if you're stuck!
+Hopefully we can clean it up and delete this note someday..
+
+---
+
+There are currently no options. If you need something feel free to open a PR or issue!
 
 ## See Also
 

@@ -33,11 +33,6 @@ The `hyperscript API` is `domBuilder(htmlSelector, properties, children)`
 
 See [hyperscript api](https://github.com/Raynos/virtual-hyperscript#hselector-properties-children)
 
----
-
-The hyperscript AST parsing got messy fast. Dive into that code with caution... Open an issue if you're stuck!
-Hopefully we can clean it up and delete this note someday..
-
 ```js
 // hyperscript API examples
 h('span', {style: {color: 'blue'}, id: 1}, 'foo bar')
@@ -48,6 +43,11 @@ react.createElement('div', [
   'another text node'
 ])
 ```
+
+---
+
+The hyperscript AST parsing got messy fast. Dive into that code with caution... Open an issue if you're stuck!
+Hopefully we can clean it up and delete this note someday..
 
 ---
 

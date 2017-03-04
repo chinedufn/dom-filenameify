@@ -1,14 +1,16 @@
 dom-filenameify [![npm version](https://badge.fury.io/js/dom-filenameify.svg)](http://badge.fury.io/js/dom-filenameify) [![Build Status](https://travis-ci.org/chinedufn/dom-filenameify.svg?branch=master)](https://travis-ci.org/chinedufn/dom-filenameify) [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 ====================
 
-
 > Browserify transform that adds filenames as attributes to your DOM elements to help locate them in code via inspect element
 
-If you've ever helped with onboarding someone onto a team you've likely gotten a flood of "How do I find *something*" questions.
+## Initial Motivation
 
-There's a cost to that question.
-It isn't just the minute wasted by you needing to answer this question.
-It's also the five minutes that your teammate spent digging around before they asked you.
+If you've ever helped with onboarding someone onto a team you've likely gotten a flood of "How do I find *BLANK?*" questions.
+
+Proceeded by the few minutes that your teammate has already spent digging around before they asked you.
+
+Followed by a few minutes of you answering that question.
+
 As well as the five minutes that you're about to spend context switching back into whatever it was that you were working on.
 
 `dom-filenameify` hopes to address part of this problem. Specifically, it helps you with finding the code for a DOM element that you see in your browser.

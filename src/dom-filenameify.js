@@ -141,8 +141,8 @@ function domFilenameify (file, opts) {
           domBuilder = domBuilderName + '.' + elementCreator
         }
 
-        // ex: `h('div', 'hello world')`
-        if (currentExpressionSource.indexOf(domBuilder) === 0) {
+        // ex: `h('div', 'hello world')`, `vdom.h('span', 'foo')`, 'react.createElement('hello', 'world')'
+        if (currentExpressionSource.indexOf(domBuilder) === 0 || currentExpressionSource.indexOf('h(') === 0) {
           var expressionPieces = currentExpressionSource.split(',')
           // ex: h('div', {style: {color: "red"}}, "hi") ->
           // ['h("div"', '{style: {color: "red"}}', '"hi")']

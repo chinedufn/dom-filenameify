@@ -176,4 +176,31 @@ test('Works with React.createElement', function (t) {
  * add filename attributes to
  */
 test('Automatically works on any function named `h`', function (t) {
+  t.plan(2)
+
+  var sourcePath = path.resolve(__dirname, './virtual-dom/h-function.js')
+  var expectedFilename = path.relative(process.cwd(), path.resolve(__dirname, './virtual-dom/h-function.js'))
+
+  var b = browserify(sourcePath)
+
+  b.transform(domFilenameify)
+  b.bundle(function (err, src) {
+    t.ifError(err, 'No error while bundling h replacement source')
+
+    var redirectConsoleOutput = {
+      console: {log: catchConsoleLog}, process: process,
+      global: {
+        virtualDOMGlobal: require('virtual-dom')
+      }
+    }
+    vm.runInNewContext(src.toString(), redirectConsoleOutput)
+
+    function catchConsoleLog (actualHTML) {
+      t.equal(
+        actualHTML.trim(),
+        `<div data-filename="${expectedFilename}">Replaces all h</div>`,
+        'Replaces any usage of h'
+      )
+    }
+  })
 })

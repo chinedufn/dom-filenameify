@@ -29,6 +29,8 @@ For example:
 
 ## To Install
 
+You should really **only use this transform in development**. Especially since it's `stability:experimental` at this time.
+
 To install the CLI use
 
 ```sh
@@ -41,9 +43,26 @@ To install the API use
 npm install --save dom-filenameify
 ```
 
-## Usage
+### CLI Usage
 
-You should really **only use this transform in development**. Especially since it's `stability:experimental` at this time.
+```js
+browserify index.js -t dom-filenameify > bundle.js
+```
+
+### API Usage
+
+```js
+var browserify = require('browserify')
+var domFilenameify = require('dom-filenameify')
+
+var b = browserify('index.js')
+b.transform(domFilenameify)
+
+// Writes output to console
+b.bundle().pipe(process.stdout)
+```
+
+## Examples
 
 Here are some examples of what happens when you use this transform
 
@@ -82,24 +101,7 @@ hx`<b>A bold element</b>`
 // -> <b filename="/app/bold-elements/a-bold-element.js"></b>
 ```
 
-### CLI Usage
 
-```js
-browserify index.js -t dom-filenameify > bundle.js
-```
-
-### API Usage
-
-```js
-var browserify = require('browserify')
-var domFilenameify = require('dom-filenameify')
-
-var b = browserify('index.js')
-b.transform(domFilenameify)
-
-// Writes output to console
-b.bundle().pipe(process.stdout)
-```
 
 ## Something broke!
 

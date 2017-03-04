@@ -1,9 +1,25 @@
+/**
+ * TODO: I don't like when files get this big.. but I'm tired and it's finally working
+ *  refactor eventually.....
+ *
+ * TODO: We aren't handling the case where you re-assign variables for your DOM builder
+ * a bunch of times..
+ *  i.e. `var foo = require('virtual-dom'); var a = foo; var h = a;`
+ */
 var falafel = require('falafel')
 var through = require('through2')
 var tokenize = require('html-tokenize')
 var Stream = require('stream')
 var path = require('path')
-var extend = require('xtend')
+
+// Maintain a map of DOM builders that we support.
+// Anything that uses the hyperscript API works fine.
+// If you'd like to support your favorite framework just
+// PR it here!
+var hyperScriptDOMBuilders = {
+  'virtual-dom': 'h',
+  'react': 'createElement'
+}
 
 module.exports = domFilenameify
 
@@ -30,9 +46,13 @@ function domFilenameify (file, opts) {
    * Add filenames to all of the HTML tags in the file
    */
   function handleEntireFile () {
+    // ex: var foo = require('virtual-dom')... foo is the name
     var domBuilderName
+    // ex: var foo = require('react') .. react is the package
+    var domBuilderModule
     // virtual-dom/h ... react.createElement... etc
     var domBuilder
+
     var self = this
 
     // We're using a streaming HTML parser so our code will not be synchronous
@@ -80,16 +100,20 @@ function domFilenameify (file, opts) {
       // ex: var h = require('virtual-dom/h'); var f = h; f('div', {}, 'hi')
       if (node.type === 'VariableDeclarator') {
         var currentVarSource = node.source()
-        if (currentVarSource.indexOf('require(') > -1 && currentVarSource.indexOf('virtual-dom') > -1) {
-          domBuilderName = currentVarSource.split('=')[0].trim()
-        }
-        if (currentVarSource.indexOf(domBuilderName) > -1) {
-          if (currentVarSource.indexOf('.h') > 0) {
-            // ex: h = vdom.h -> h
-            // Now we know that anytime the function `h` is called it's a virtual-dom/h
-            domBuilder = currentVarSource.split('=')[0].trim()
+        // Loop through all of our potential DOM builders to see if we are using any of them
+        Object.keys(hyperScriptDOMBuilders).forEach(function (domBuilderPackage) {
+          if (currentVarSource.indexOf('require(') > -1 && (currentVarSource.indexOf("'" + domBuilderPackage + "'") > -1 || currentVarSource.indexOf('"' + domBuilderPackage + '"') > -1)) {
+            domBuilderName = currentVarSource.split('=')[0].trim()
+            domBuilderModule = domBuilderPackage
           }
-        }
+          if (currentVarSource.indexOf(domBuilderName) > -1) {
+            if (currentVarSource.indexOf('.' + hyperScriptDOMBuilders[domBuilderPackage]) > 0) {
+              // ex: h = vdom.h -> h
+              // Now we know that anytime the function `h` is called it's a virtual-dom/h
+              domBuilder = currentVarSource.split('=')[0].trim()
+            }
+          }
+        })
       }
 
       // ex:
@@ -104,8 +128,9 @@ function domFilenameify (file, opts) {
         // This makes this work...:
         // var abcd = require('virtual-dom')
         // abcd.h('div', 'hello world')
-        if (currentExpressionSource.indexOf(domBuilderName + '.h') === 0) {
-          domBuilder = domBuilderName + '.h'
+        var elementCreator = hyperScriptDOMBuilders[domBuilderModule]
+        if (currentExpressionSource.indexOf(domBuilderName + '.' + elementCreator) === 0) {
+          domBuilder = domBuilderName + '.' + elementCreator
         }
 
         if (currentExpressionSource.indexOf(domBuilder) === 0) {
@@ -114,9 +139,7 @@ function domFilenameify (file, opts) {
           // ['h("div"', '{style: {color: "red"}}', '"hi")']
           if (expressionPieces.length > 2) {
             domNodeProperties = JSON.parse(expressionPieces[1])
-            domNodeProperties.attributes = extend(domNodeProperties.attributes, {
-              filename: filename
-            })
+            domNodeProperties['data-filename'] = filename
             expressionPieces[1] = JSON.stringify(domNodeProperties)
             node.update(expressionPieces.join(','))
           } else {
@@ -127,12 +150,10 @@ function domFilenameify (file, opts) {
                 // Handle cases when the second parameter is a child elements arary
                 // ex: h('div', ['hello', 'world'])
                 expressionPieces[2] = domNodeProperties
-                expressionPieces[1] = JSON.stringify({ attributes: { filename: filename } })
+                expressionPieces[1] = JSON.stringify({'data-filename': filename})
               } else {
                 // If our second parameter is a property object we add a filename attribute
-                domNodeProperties.attributes = extend(domNodeProperties.attributes, {
-                  filename: filename
-                })
+                domNodeProperties['data-filename'] = filename
                 expressionPieces[1] = JSON.stringify(domNodeProperties)
               }
               node.update(expressionPieces.join(','))
@@ -140,7 +161,7 @@ function domFilenameify (file, opts) {
               // Handle cases when your second parameter if your child element string
               // ex: h('div', 'hello world')
               expressionPieces[2] = expressionPieces[1]
-              expressionPieces[1] = JSON.stringify({ attributes: { filename: filename } })
+              expressionPieces[1] = JSON.stringify({'data-filename': filename})
               node.update(expressionPieces.join(','))
             }
           }

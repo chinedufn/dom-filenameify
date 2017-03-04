@@ -33,6 +33,7 @@
   "devDependencies": {
     "browserify": "^14.1.0",
     "hyperx": "^2.0.5",
+    "react": "^15.4.2",
     "standard": "^9.0.0",
     "tape": "^4.6.3",
     "virtual-dom": "^2.1.1"
@@ -40,7 +41,6 @@
   "dependencies": {
     "falafel": "^2.0.0",
     "html-tokenize": "^2.0.0",
-    "through2": "^2.0.3",
-    "xtend": "^4.0.1"
+    "through2": "^2.0.3"
   }
 }

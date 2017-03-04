@@ -1,0 +1,45 @@
+{
+  "name": "dom-filenameify",
+  "version": "0.0.1",
+  "description": "Add filenames as attributes to your DOM elements to help locate them in code via inspect element",
+  "main": "src/dom-filenameify.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "standard && tape test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinedufn/dom-filenameify.git"
+  },
+  "keywords": [
+    "dom",
+    "file",
+    "name",
+    "filename",
+    "inspect",
+    "element",
+    "browserify",
+    "transform",
+    "filenameify"
+  ],
+  "author": "Chinedu Francis Nwafili <frankie.nwafili@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chinedufn/dom-filenameify/issues"
+  },
+  "homepage": "https://github.com/chinedufn/dom-filenameify#readme",
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "hyperx": "^2.0.5",
+    "standard": "^9.0.0",
+    "tape": "^4.6.3",
+    "virtual-dom": "^2.1.1"
+  },
+  "dependencies": {
+    "falafel": "^2.0.0",
+    "html-tokenize": "^2.0.0",
+    "through2": "^2.0.3"
+  }
+}

@@ -6,7 +6,7 @@ var vm = require('vm')
 var Stream = require('stream')
 
 var sourcePath = path.resolve(__dirname, './simple-html/simple-source-fixture.js')
-var expectedFilename = 'test/tagged-template-literal/simple-html/simple-source-fixture.js'
+var expectedFilename = path.relative(process.cwd(), path.resolve(__dirname, './simple-html/simple-source-fixture.js'))
 
 test('Adds filenames to HTML tags', function (t) {
   t.plan(2)

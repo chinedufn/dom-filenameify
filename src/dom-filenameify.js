@@ -98,13 +98,22 @@ function domFilenameify (file, opts) {
 
       // TODO: Handle cases when you are re-assigning variables
       // ex: var h = require('virtual-dom/h'); var f = h; f('div', {}, 'hi')
+      //  This is probably an extreme edge case so let's see if anyone complains runs into an issue...
       if (node.type === 'VariableDeclarator') {
         var currentVarSource = node.source()
         // Loop through all of our potential DOM builders to see if we are using any of them
         Object.keys(hyperScriptDOMBuilders).forEach(function (domBuilderPackage) {
-          if (currentVarSource.indexOf('require(') > -1 && (currentVarSource.indexOf("'" + domBuilderPackage + "'") > -1 || currentVarSource.indexOf('"' + domBuilderPackage + '"') > -1)) {
-            domBuilderName = currentVarSource.split('=')[0].trim()
-            domBuilderModule = domBuilderPackage
+          if (currentVarSource.indexOf('require(') > -1) {
+            // ex: require('virtual-dom') || require("virtual-dom")
+            if (currentVarSource.indexOf("'" + domBuilderPackage + "'") > -1 || currentVarSource.indexOf('"' + domBuilderPackage + '"') > -1) {
+              domBuilderName = currentVarSource.split('=')[0].trim()
+              domBuilderModule = domBuilderPackage
+            } else if (currentVarSource.indexOf("'" + domBuilderPackage + "/h'") > -1 || currentVarSource.indexOf('"' + domBuilderPackage + '/h"') > -1) {
+              // ex: require('virtual-dom/h') .. require("virtual-dom/h")
+              domBuilderName = currentVarSource.split('=')[0].trim()
+              domBuilderModule = domBuilderPackage
+              domBuilder = domBuilderName
+            }
           }
           if (currentVarSource.indexOf(domBuilderName) > -1) {
             if (currentVarSource.indexOf('.' + hyperScriptDOMBuilders[domBuilderPackage]) > 0) {
@@ -116,8 +125,7 @@ function domFilenameify (file, opts) {
         })
       }
 
-      // ex:
-      // ... vdom.h('span', 'ok') ... react.createElement('div', {key: '1'}, 'hello world')
+      // ex: ... vdom.h('span', 'ok') ... react.createElement('div', {key: '1'}, 'hello world')
       if (node.type === 'CallExpression') {
         var domNodeProperties
 
@@ -133,6 +141,7 @@ function domFilenameify (file, opts) {
           domBuilder = domBuilderName + '.' + elementCreator
         }
 
+        // ex: `h('div', 'hello world')`
         if (currentExpressionSource.indexOf(domBuilder) === 0) {
           var expressionPieces = currentExpressionSource.split(',')
           // ex: h('div', {style: {color: "red"}}, "hi") ->

@@ -74,6 +74,7 @@ hx`<b>A bold element</b>`
 ```
 
 ### CLI Usage
+<<<<<<< HEAD
 
 ```js
 browserify index.js -t dom-filenameify > bundle.js
@@ -88,6 +89,22 @@ var domFilenameify = require('dom-filenameify')
 var b = browserify('index.js')
 b.transform(domFilenameify)
 
+=======
+
+```js
+browserify index.js -t dom-filenameify > bundle.js
+```
+
+### API Usage
+
+```js
+var browserify = require('browserify')
+var domFilenameify = require('dom-filenameify')
+
+var b = browserify('index.js')
+b.transform(domFilenameify)
+
+>>>>>>> 3f561f4877a8412552bd2a7da6d59927213a023e
 // Writes output to console
 b.bundle().pipe(process.stdout)
 ```

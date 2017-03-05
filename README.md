@@ -1,19 +1,13 @@
 dom-filenameify [![npm version](https://badge.fury.io/js/dom-filenameify.svg)](http://badge.fury.io/js/dom-filenameify) [![Build Status](https://travis-ci.org/chinedufn/dom-filenameify.svg?branch=master)](https://travis-ci.org/chinedufn/dom-filenameify) [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 ====================
 
-> Browserify transform that adds filenames as attributes to your DOM elements to help locate them in code via inspect element
+> A browserify transform that adds filenames as attributes to your DOM elements to help locate them in code via inspect element
 
 ## Initial Motivation
 
 If you've ever helped with onboarding someone onto a team you've likely gotten a flood of "How do I find *BLANK?*" questions.
 
-Proceeded by the few minutes that your teammate has already spent digging around before they asked you.
-
-Followed by a few minutes of you answering that question.
-
-As well as the five minutes that you're about to spend context switching back into whatever it was that you were working on.
-
-`dom-filenameify` hopes to address part of this problem. Specifically, it helps you with finding the code for a DOM element that you see in your browser.
+`dom-filenameify` hopes to address part of this problem by annotating DOM nodes in your browser with an attribute that tells you where to find it in code.
 
 ---
 
@@ -25,7 +19,8 @@ in order to make them generate DOM notes that have a `data-filename` attribute w
 It does this by walking your AST and inserting filename attributes appropriately. Check out the [test](/test) directory
 for full examples.
 
-For example:
+```js
+```
 
 ## To Install
 
@@ -41,25 +36,6 @@ To install the API use
 
 ```sh
 npm install --save dom-filenameify
-```
-
-### CLI Usage
-
-```js
-browserify index.js -t dom-filenameify > bundle.js
-```
-
-### API Usage
-
-```js
-var browserify = require('browserify')
-var domFilenameify = require('dom-filenameify')
-
-var b = browserify('index.js')
-b.transform(domFilenameify)
-
-// Writes output to console
-b.bundle().pipe(process.stdout)
 ```
 
 ## Examples
@@ -82,7 +58,7 @@ var h = vdom.h
 h('div', {
   style: {color: 'red'}
 }, 'foo')
-// -> <div></div>
+// -> <div filename="/app/my-component.js" style="color: red;"></div>
 ```
 
 ```js
@@ -101,7 +77,24 @@ hx`<b>A bold element</b>`
 // -> <b filename="/app/bold-elements/a-bold-element.js"></b>
 ```
 
+### CLI Usage
 
+```js
+browserify index.js -t dom-filenameify > bundle.js
+```
+
+### API Usage
+
+```js
+var browserify = require('browserify')
+var domFilenameify = require('dom-filenameify')
+
+var b = browserify('index.js')
+b.transform(domFilenameify)
+
+// Writes output to console
+b.bundle().pipe(process.stdout)
+```
 
 ## Something broke!
 
@@ -115,6 +108,8 @@ $ npm run test
 ```
 
 ## Notes
+
+#### What is the hyperscript API?
 
 The `hyperscript API` is `domBuilder(htmlSelector, properties, children)`
 
@@ -130,15 +125,6 @@ react.createElement('div', [
   'another text node'
 ])
 ```
-
----
-
-The hyperscript AST parsing got messy fast. Dive into that code with caution... Open an issue if you're stuck!
-Hopefully we can clean it up and delete this note someday..
-
----
-
-There are currently no options. If you need something feel free to open a PR or issue!
 
 ## See Also
 

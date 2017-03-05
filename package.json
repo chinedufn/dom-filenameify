@@ -34,6 +34,7 @@
     "browserify": "^14.1.0",
     "hyperx": "^2.0.5",
     "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "standard": "^9.0.0",
     "tape": "^4.6.3",
     "virtual-dom": "^2.1.1"

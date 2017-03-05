@@ -188,7 +188,7 @@ test('Automatically works on any function named `h`', function (t) {
     t.ifError(err, 'No error while bundling h replacement source')
 
     var redirectConsoleOutput = {
-      console: {log: catchConsoleLog}, process: process,
+      console: {log: catchConsoleLog},
       global: {
         virtualDOMGlobal: require('virtual-dom')
       }

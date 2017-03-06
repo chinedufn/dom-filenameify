@@ -2,7 +2,8 @@
 var h = global.virtualDOMGlobal.h
 
 var foo = h('div', {
-  id: 'some-id'
+  id: 'some-id',
+  onclick: function () {}
 }, 'Replaces all h')
 
 console.log(global.virtualDOMGlobal.create(foo).toString())

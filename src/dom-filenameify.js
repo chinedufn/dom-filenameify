@@ -11,7 +11,6 @@ var through = require('through2')
 var tokenize = require('html-tokenize')
 var Stream = require('stream')
 var path = require('path')
-var JSON5 = require('json5')
 
 // Maintain a map of DOM builders that we support.
 // Anything that uses the hyperscript API works fine.
@@ -145,15 +144,32 @@ function domFilenameify (file, opts) {
         // ex: `h('div', 'hello world')`, `vdom.h('span', 'foo')`, 'react.createElement('hello', 'world')'
         if (currentExpressionSource.indexOf(domBuilder) === 0 || currentExpressionSource.indexOf('h(') === 0) {
           var expressionPieces = currentExpressionSource.split(',')
+
+          // Condense the pieces into an array of '[tagName, properties, children]'
+          if (expressionPieces.length > 3) {
+            expressionPieces = expressionPieces.reduce(function (condensed, piece, index) {
+              if (index === 0) {
+                condensed[0] = piece
+              } else if (index === expressionPieces.length - 1) {
+                condensed[2] = piece
+              } else {
+                condensed[1] = condensed[1] ? condensed[1].concat(',').concat(piece) : piece
+              }
+              return condensed
+            }, [])
+          }
+
           // ex: h('div', {style: {color: "red"}}, "hi") ->
           // ['h("div"', '{style: {color: "red"}}', '"hi")']
           if (expressionPieces.length > 2) {
-            // The JSON5 parser handles invalid JSON
-            // Such as {hello: 'world'}
-            domNodeProperties = JSON5.parse(expressionPieces[1])
+            var elementProperties = expressionPieces[1].trim()
+            if (elementProperties[0] === '{' && elementProperties[elementProperties.length - 1] === '}') {
+              // If there are other properties we add a comma after our filename property
+              var addComma = elementProperties.replace(/\s/g, '')[0] === '{' && elementProperties.replace(/\s/g, '')[1] === '}' ? '' : ','
+              var expressionWithoutFirstBracket = expressionPieces[1].split('{').slice(1).join('{').concat()
+              expressionPieces[1] = '{' + '"data-filename": "' + filename + '"' + addComma + expressionWithoutFirstBracket
+            }
 
-            domNodeProperties['data-filename'] = filename
-            expressionPieces[1] = JSON.stringify(domNodeProperties)
             node.update(expressionPieces.join(','))
           } else {
             try {

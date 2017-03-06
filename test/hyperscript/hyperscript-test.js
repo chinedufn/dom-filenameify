@@ -198,7 +198,7 @@ test('Automatically works on any function named `h`', function (t) {
     function catchConsoleLog (actualHTML) {
       t.equal(
         actualHTML.trim(),
-        `<div data-filename="${expectedFilename}">Replaces all h</div>`,
+        `<div id="some-id" data-filename="${expectedFilename}">Replaces all h</div>`,
         'Replaces any usage of h'
       )
     }

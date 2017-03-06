@@ -11,6 +11,7 @@ var through = require('through2')
 var tokenize = require('html-tokenize')
 var Stream = require('stream')
 var path = require('path')
+var JSON5 = require('json5')
 
 // Maintain a map of DOM builders that we support.
 // Anything that uses the hyperscript API works fine.
@@ -147,7 +148,10 @@ function domFilenameify (file, opts) {
           // ex: h('div', {style: {color: "red"}}, "hi") ->
           // ['h("div"', '{style: {color: "red"}}', '"hi")']
           if (expressionPieces.length > 2) {
-            domNodeProperties = JSON.parse(expressionPieces[1])
+            // The JSON5 parser handles invalid JSON
+            // Such as {hello: 'world'}
+            domNodeProperties = JSON5.parse(expressionPieces[1])
+
             domNodeProperties['data-filename'] = filename
             expressionPieces[1] = JSON.stringify(domNodeProperties)
             node.update(expressionPieces.join(','))

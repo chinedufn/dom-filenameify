@@ -42,6 +42,7 @@
   "dependencies": {
     "falafel": "^2.0.0",
     "html-tokenize": "^2.0.0",
+    "json5": "^0.5.1",
     "through2": "^2.0.3"
   }
 }

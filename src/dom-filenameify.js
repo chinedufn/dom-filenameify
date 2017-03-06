@@ -79,7 +79,6 @@ function domFilenameify (file, opts) {
         var templateLiteralStream = readableTemplateLiteral.pipe(tokenize())
         .pipe(through.obj(function (row, enc, nextDomNode) {
           if (row[0] === 'open') {
-            throw new Error(row[1])
             var htmlTagWithoutFilname = row[1].toString()
             htmlTagWithoutFilname = htmlTagWithoutFilname.slice(0, -1)
             var htmlTagWithFilename = htmlTagWithoutFilname + ' data-filename="' + filename + '"'

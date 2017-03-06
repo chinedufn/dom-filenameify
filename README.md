@@ -103,6 +103,10 @@ if you open up an issue describing the error. At any rate, let's get this fixed!
 $ npm run test
 ```
 
+## TODO:
+
+- [ ] Handle `<img></img>` issues. This breaks `dom-filenameify`. Should just skip over these incorrectly used
+
 ## Notes
 
 #### What is the hyperscript API?

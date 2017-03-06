@@ -171,7 +171,7 @@ function domFilenameify (file, opts) {
             }
 
             node.update(expressionPieces.join(','))
-          } else {
+          } else if (expressionPieces.length === 2) {
             try {
               // Handle cases when the second parameter is your properties object
               domNodeProperties = JSON.parse(expressionPieces[1])

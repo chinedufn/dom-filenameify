@@ -26,7 +26,7 @@ test('Adds filenames to HTML tags', function (t) {
     function catchConsoleLog (actualHTML) {
       t.equal(
         actualHTML.trim(),
-        `<div filename="${expectedFilename}" class="bar">hello world + 1</div>`,
+        `<div data-filename="${expectedFilename}" class="bar">hello world + 1</div>`,
         'Properly inserts filename as an attribute'
       )
     }

@@ -205,7 +205,9 @@ function domFilenameify (file, opts) {
     } catch (e) {
       // TODO: Right now we're just console logging an error (usually a syntax error in the consumers code)
       // We should look into being smarter about things. This is a quick stop gap
-      console.log(e)
+      self.push(Buffer.concat(piecesOfFile).toString())
+      self.push(null)
+      return
     }
     // Handle cases where no async processing was needed.
     // (if there were no template literals in the file)
